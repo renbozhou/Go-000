@@ -33,6 +33,7 @@ func handleConnection(conn net.Conn) {
 		n,err:= conn.Read(buf[:])
 		if err != nil {
 			fmt.Println("Read from tcp server failed,err:",err)
+			removeConnFromMap(conn)
 			break
 		}
 		data := string(buf[:n])
@@ -41,6 +42,10 @@ func handleConnection(conn net.Conn) {
 		sendMsgToChan(data,conn)
 		fmt.Printf("Recived from client,data:%s\n",data)
 	}
+}
+
+func removeConnFromMap(conn net.Conn) {
+	 connChanMap.Delete(conn)
 }
 
 func sendMsgToChan(data string, conn net.Conn) {
